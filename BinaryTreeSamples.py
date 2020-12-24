@@ -70,24 +70,35 @@ class Node:
     # recursively calling Search function
         if (value < self.data):
 
-           if self.left is None:
-               print('Thee is no left child node available')
-               return  "Not found"
+            #If there is no left child, then the element to be searched in the tree is not found
+            if self.left is None:
+                print('the value', value, 'is not found in the tree')
+                return
             else:
-                print('hello world')
-            
-            
-            
-            
+            # Recursievely called SearchTree to find out if element is there in the left child
+                self.left.SearchTree(value)
+        
+    
+    #if the value to be searched is greater than its root, try to find whether it matches its right child by 
+    #recursively calling SearchTree function
+        elif (value > self.data):
+        #if there is no right child, then the element to be searched in the tree is not found
+            if self.right is None:
+                print('the value', value, 'is not found in the tree')
+                return
+            else:
+        # Recursievely called SearchTree to find out if element is there in the left child
+                self.right.SearchTree(value)
+
             
 
 root = Node(10)
-root.Insert(1)
-#root.Insert(2)
-#root.Insert(20)
-#root.Insert(430)
+root.Insert(20)
+root.Insert(100)
+root.Insert(200)
+root.Insert(430)
 
 root.PrintTree()
 
-root.SearchTree(20)
+root.SearchTree(100)
 
