@@ -65,6 +65,7 @@ class Node:
     # If data is found at the root node, then return the root node.
         if (self.data == value):
             print('data', value, 'is found')
+            return self
     
     # If the data to be searched is less than its root, try to find whether it matches its left child by 
     # recursively calling Search function
@@ -90,6 +91,12 @@ class Node:
         # Recursievely called SearchTree to find out if element is there in the left child
                 self.right.SearchTree(value)
 
+    def DeleteTree(self, value):
+        x = self.SearchTree(value)
+        if x is None:
+            print('Element' , value, ' not found')
+            return None
+
             
 
 root = Node(10)
@@ -98,7 +105,8 @@ root.Insert(100)
 root.Insert(200)
 root.Insert(430)
 
+
 root.PrintTree()
 
 root.SearchTree(100)
-
+root.DeleteTree(500)
