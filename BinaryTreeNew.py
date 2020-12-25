@@ -68,6 +68,10 @@ class BinarySearchTree:
         if(rootnode.right):
             self.PrintTree(rootnode.right)
 
+#The following function checks whether the current node has one child or not
+
+    def IsOneChild(self, CurrentNode):
+
 #The following function is for seearching the binary tree
 
     def Search(self,value, rootnode):
@@ -102,13 +106,40 @@ class BinarySearchTree:
 
 
     def getParent(self, currentnode, rootnode):
-        
+
+
+        if rootnode.left is not None:
+
+            if (rootnode.left.data == currentnode.data):
+                print("The node", currentnode.data, "is the left child of the parent node", rootnode.data)
+                self.ParentNode = rootnode
+                self.LinkInParent = "left"
+                return
+
+        if rootnode.right is not None:
+
+            if (rootnode.right.data == currentnode.data):
+                        print("The node", currentnode.data, "is the right child of the parent node", rootnode.data)
+                        self.ParentNode = rootnode
+                        self.LinkInParent = "right"
+                        return
+
+        if rootnode.left is not None:
+            if (currentnode.data < rootnode.left.data):
+                self.getParent(currentnode, rootnode.left)
+
+        if rootnode.right is not None:
+            if (currentnode.data > rootnode.right.data):
+                self.getParent(currentnode, rootnode.right)
+
+           
 
     def DeleteNode(self, value, rootnode):
         # Call the search function to see if the Node is available in the tree
         self.Search(value, rootnode)
         x = self.SearchResult
-      
+
+        
 
         if x is None:
             print('Element' , value, ' not found')
@@ -116,13 +147,28 @@ class BinarySearchTree:
 
         ret = x
 
-        # Check if the node to be deleted is a root node
-        if (self.isLeafNode(x)):
 
+        #Check if the node to be deleted is a leaf node
+        if (self.isLeafNode(x)):
+            self.getParent(x, rootnode)
+            print('parent node',self.ParentNode.data)
+
+            parent = self.ParentNode
+
+            # check if the node to be deleted is the left child of its root, then break off its left link 
+            # in the parent
+            if self.LinkInParent == "left":
+                parent.left=None
+            
+            #check if the node to be deleted is the right child of its root, then break of its right link
+            if self.LinkInParent == "right":
+                parent.right=None
+            return ret
+
+        #check if x is a node with only one child
 
 
         
-        # if x is the leaf node, go to the parent of x and break of x from it
 
 
 
@@ -142,4 +188,5 @@ tree.PrintTree(rootnode)
 
 tree.DeleteNode(100,rootnode)
 
+tree.PrintTree(rootnode)
 
