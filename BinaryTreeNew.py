@@ -100,6 +100,28 @@ class BinarySearchTree:
             self.TwoChild = False
         return           
 
+   
+
+    def inOrderSuccessor(self,root, n): 
+        
+        # Step 1 of the above algorithm 
+        if n.right is not None: 
+            return self.minValue(n.right) 
+    
+        # Step 2 of the above algorithm 
+        succ=Node(None) 
+        
+        
+        while( root): 
+            if(root.data<n.data): 
+                root=root.right 
+            elif(root.data>n.data): 
+                succ=root 
+                root=root.left 
+            else: 
+                break
+        return succ 
+        
     def minValue(self,node): 
         current = node 
     
@@ -110,23 +132,7 @@ class BinarySearchTree:
             current = current.left 
     
         return current 
-  
-    def inOrderSuccessor(self,root, currentnode): 
-      
-        # Step 1 of the above algorithm 
-        if currentnode.right is not None: 
-            return self.minValue(currentnode.right) 
-    
-        # Step 2 of the above algorithm 
-        p = currentnode.parent 
-        while( p is not None): 
-            if currentnode != p.right : 
-                break 
-            currentnode = p  
-            p = p.parent 
-        return p 
 
-#The following function is for seearching the binary tree
 
     def Search(self,value, rootnode):
         if (rootnode is None):
@@ -149,7 +155,6 @@ class BinarySearchTree:
             if value > rootnode.data:
                 self.Search(value, rootnode.right)
 
-    
     def isLeafNode(self, x):
 
         if x.left == None and x.right == None:
@@ -268,7 +273,51 @@ class BinarySearchTree:
             parent = self.ParentNode
             i = self.inOrderSuccessor(rootnode, x)
             print('InOrder successor of',x.data, 'is', i.data)
-            
+           
+            self.getParent(i,rootnode)
+            parenti = self.ParentNode
+
+        #Check if x is the left child of parent
+
+            if parent.left.data == x.data:
+
+                
+                #Replace i as left subchild of p
+                parent.left = i
+
+                #Replace the children of x to childen of i
+                i.left = x.left
+                i.right = x.right
+
+                if parenti.left == i:
+                    parenti.left=None
+
+                if parenti.right == i:
+                    parenti.right==None
+
+                return
+
+        #Check if x is the right sub child of parent
+
+            if parent.right.data == x.data:
+                #Replace i as the right subchild of p
+                parent.right = i
+
+                #Replace the children of x to be children of i
+                i.left = x.left
+
+
+                i.right = x.right
+
+                if parenti.left == i:
+                    parenti.left=None
+
+                if parenti.right == i:
+                    parenti.right==None
+                
+                return ret
+
+
 
 
 
@@ -282,11 +331,15 @@ tree.InsertNode(rootnode, 12)
 tree.InsertNode(rootnode, 10)
 tree.InsertNode(rootnode, 14)
 tree.InsertNode(rootnode, 22)
-tree.InsertNode(rootnode, 100)
+tree.InsertNode(rootnode, 21)
+tree.InsertNode(rootnode, 30)
+tree.InsertNode(rootnode, 29)
+tree.InsertNode(rootnode, 45)
     
 tree.PrintTree(rootnode)
 
-tree.DeleteNode(10,rootnode)
+tree.DeleteNode(30,rootnode)
 
 tree.PrintTree(rootnode)
+
 
