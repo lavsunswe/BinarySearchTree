@@ -70,7 +70,22 @@ class BinarySearchTree:
 
 #The following function checks whether the current node has one child or not
 
-    def IsOneChild(self, CurrentNode):
+    def IsOneChild(self, currentnode):
+        if currentnode is not None:
+            if (currentnode.left is not None ) and (currentnode.right is None):
+                self.SingleChild = True
+                self.ChildLink = "left"
+                print('The current node',currentnode.data,  'has only one child-left',currentnode.left.data )
+               
+            elif (currentnode.left is None) and (currentnode.right is not None ):
+                self.SingleChild = True
+                self.ChildLink = "right"
+                print('The current node',currentnode.data,  'has only one child-right',currentnode.right.data )
+            return
+
+            
+
+
 
 #The following function is for seearching the binary tree
 
@@ -166,9 +181,54 @@ class BinarySearchTree:
             return ret
 
         #check if x is a node with only one child
+        self.IsOneChild(x)
+
+        if self.SingleChild:
+            # Got to parent of x and replace it's link in the parent node with the child node of x
+            self.getParent(x, rootnode)
+            print('parent node',self.ParentNode.data)
+
+            parent = self.ParentNode
+
+            #if x is the left child of its parent replace its link with the available single child of x
+
+            if self.LinkInParent == "left":
+                print('inside left path')
+                
+                #replace if single left child is only available
+                if self.SingleChild == True and self.ChildLink == "left":
+                    parent.left = x.left
+                    print('replace parent with left')
+                    return ret
+                    
+                #replace if single right child is only available
+                if self.SingleChild == True and self.ChildLink == "right":
+                    parent.left = x.right
+                    print('replace parent with right')
+                    return ret
+
+            
+        ##if x is the right child of its parent replace its link with the available single child of x
+
+            if self.LinkInParent == "right":
+                print('inside right path')
+                if self.SingleChild == True and self.ChildLink == "left":
+                    parent.right = x.left
+                    return ret
+
+                #replace if single right child is only available
+                if self.SingleChild == True and self.ChildLink == "right":
+                    parent.right = x.right
+                    return ret
+                
+
+            
 
 
-        
+
+
+
+
 
 
 
@@ -186,7 +246,7 @@ tree.InsertNode(rootnode, 100)
     
 tree.PrintTree(rootnode)
 
-tree.DeleteNode(100,rootnode)
+tree.DeleteNode(50,rootnode)
 
 tree.PrintTree(rootnode)
 
