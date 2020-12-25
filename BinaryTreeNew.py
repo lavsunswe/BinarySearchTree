@@ -14,6 +14,7 @@ class Node:
 class BinarySearchTree:
     def __init__(self):
         self.root = None
+       
 
     def SetRoot(self,value):
         self.root = Node(value)
@@ -76,16 +77,54 @@ class BinarySearchTree:
                 self.SingleChild = True
                 self.ChildLink = "left"
                 print('The current node',currentnode.data,  'has only one child-left',currentnode.left.data )
+                
                
             elif (currentnode.left is None) and (currentnode.right is not None ):
                 self.SingleChild = True
                 self.ChildLink = "right"
                 print('The current node',currentnode.data,  'has only one child-right',currentnode.right.data )
-            return
-
+            
+            else:
+                self.SingleChild = False
             
 
 
+ #The following function checks whether the current node has two children or not
+    def IsTwoChild(self, currentnode):
+
+        if currentnode.left is not None and currentnode.right is not None:
+            print('the current node has two children')
+            self.TwoChild = True
+        else:
+            print('the current node does not have two children')
+            self.TwoChild = False
+        return           
+
+    def minValue(self,node): 
+        current = node 
+    
+        # loop down to find the leftmost leaf 
+        while(current is not None): 
+            if current.left is None: 
+                break
+            current = current.left 
+    
+        return current 
+  
+    def inOrderSuccessor(self,root, currentnode): 
+      
+        # Step 1 of the above algorithm 
+        if currentnode.right is not None: 
+            return self.minValue(currentnode.right) 
+    
+        # Step 2 of the above algorithm 
+        p = currentnode.parent 
+        while( p is not None): 
+            if currentnode != p.right : 
+                break 
+            currentnode = p  
+            p = p.parent 
+        return p 
 
 #The following function is for seearching the binary tree
 
@@ -121,10 +160,7 @@ class BinarySearchTree:
 
 
     def getParent(self, currentnode, rootnode):
-
-
         if rootnode.left is not None:
-
             if (rootnode.left.data == currentnode.data):
                 print("The node", currentnode.data, "is the left child of the parent node", rootnode.data)
                 self.ParentNode = rootnode
@@ -132,19 +168,18 @@ class BinarySearchTree:
                 return
 
         if rootnode.right is not None:
-
             if (rootnode.right.data == currentnode.data):
-                        print("The node", currentnode.data, "is the right child of the parent node", rootnode.data)
-                        self.ParentNode = rootnode
-                        self.LinkInParent = "right"
-                        return
+                print("The node", currentnode.data, "is the right child of the parent node", rootnode.data)
+                self.ParentNode = rootnode
+                self.LinkInParent = "right"
+                return
 
         if rootnode.left is not None:
-            if (currentnode.data < rootnode.left.data):
+            if (currentnode.data < rootnode.data):
                 self.getParent(currentnode, rootnode.left)
 
         if rootnode.right is not None:
-            if (currentnode.data > rootnode.right.data):
+            if (currentnode.data > rootnode.data):
                 self.getParent(currentnode, rootnode.right)
 
            
@@ -153,9 +188,7 @@ class BinarySearchTree:
         # Call the search function to see if the Node is available in the tree
         self.Search(value, rootnode)
         x = self.SearchResult
-
         
-
         if x is None:
             print('Element' , value, ' not found')
             return None
@@ -166,15 +199,15 @@ class BinarySearchTree:
         #Check if the node to be deleted is a leaf node
         if (self.isLeafNode(x)):
             self.getParent(x, rootnode)
+
+            
             print('parent node',self.ParentNode.data)
-
             parent = self.ParentNode
-
             # check if the node to be deleted is the left child of its root, then break off its left link 
             # in the parent
             if self.LinkInParent == "left":
                 parent.left=None
-            
+                
             #check if the node to be deleted is the right child of its root, then break of its right link
             if self.LinkInParent == "right":
                 parent.right=None
@@ -222,31 +255,38 @@ class BinarySearchTree:
                     return ret
                 
 
+
+        # if the node x has two children replace x with inorder successor
+
+        self.IsTwoChild(x)
+
+        if self.TwoChild:
+           
+            self.getParent(x, rootnode)
+
+            print('parent node',self.ParentNode.data)
+            parent = self.ParentNode
+            i = self.inOrderSuccessor(rootnode, x)
+            print('InOrder successor of',x.data, 'is', i.data)
             
 
 
 
-
-
-
-
-
-
-
 tree = BinarySearchTree()
-rootnode = tree.SetRoot(10)
+rootnode = tree.SetRoot(20)
 
-tree.InsertNode(rootnode, 9)
-tree.InsertNode(rootnode, 7)
-tree.InsertNode(rootnode, 5)
+tree.InsertNode(rootnode, 8)
+tree.InsertNode(rootnode, 4)
+tree.InsertNode(rootnode, 12)
         
-tree.InsertNode(rootnode, 30)
-tree.InsertNode(rootnode, 50)
+tree.InsertNode(rootnode, 10)
+tree.InsertNode(rootnode, 14)
+tree.InsertNode(rootnode, 22)
 tree.InsertNode(rootnode, 100)
     
 tree.PrintTree(rootnode)
 
-tree.DeleteNode(50,rootnode)
+tree.DeleteNode(10,rootnode)
 
 tree.PrintTree(rootnode)
 
